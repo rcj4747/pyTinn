@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
 import math
-import random
 import pickle
+import random
+from typing import Any, List
 
 
 class Tinn:
 
-    def __init__(self, nips: int, nhid: int, nops: int):
+    def __init__(self, nips: int, nhid: int, nops: int) -> None:
         """Build a new Tinn object given:
         * number of inputs (nips),
         * number of hidden neurons for the hidden layer (nhid),
@@ -19,23 +19,24 @@ class Tinn:
 
         # biases, Tinn only supports one hidden layer so there are two biases
         self.b = [random.random() - 0.5 for _ in range(2)]
-        self.x1 = [[0] * nips for _ in range(nhid)]  # input to hidden layer
-        self.h = [0] * nhid  # hidden layer
+        # input to hidden layer
+        self.x1 = [[float(0)] * nips for _ in range(nhid)]
+        self.h = [float(0)] * nhid  # hidden layer
         self.x2 = [[random.random() - 0.5 for _ in range(nhid)]
                    for _ in range(nops)]  # hidden to output layer weights
-        self.o = [0] * nops  # output layer
+        self.o = [float(0)] * nops  # output layer
 
-    def save(self, path):
+    def save(self, path: str) -> None:
         """Saves the t to disk."""
         pickle.dump(self, open(path, 'wb'))
 
 
-def xtload(path: str) -> Tinn:
+def xtload(path: str) -> Any:
     """Loads a new t from disk."""
     return pickle.load(open(path, 'rb'))
 
 
-def xttrain(t: Tinn, in_: float, tg: float, rate: float) -> float:
+def xttrain(t: Tinn, in_: List[float], tg: List[float], rate: float) -> float:
     """Trains a Tinn (t) given:
     * an input (in_),
     * target output (tg), and
@@ -46,7 +47,7 @@ def xttrain(t: Tinn, in_: float, tg: float, rate: float) -> float:
     return toterr(tg, t.o)
 
 
-def xtpredict(t: Tinn, in_: float) -> float:
+def xtpredict(t: Tinn, in_: List[float]) -> List[float]:
     """Returns an output prediction given an input."""
     fprop(t, in_)
     return t.o
@@ -77,10 +78,10 @@ def pdact(a: float) -> float:
     return a * (1 - a)
 
 
-def bprop(t: Tinn, in_: List[float], tg: float, rate: float) -> None:
+def bprop(t: Tinn, in_: List[float], tg: List[float], rate: float) -> None:
     """Back propagation."""
     for i in range(t.nhid):
-        s = 0
+        s = float(0)
         # Calculate total error change with respect to output.
         for j in range(t.nops):
             ab = pderr(t.o[j], tg[j]) * pdact(t.o[j])
@@ -92,7 +93,7 @@ def bprop(t: Tinn, in_: List[float], tg: float, rate: float) -> None:
             t.x1[i][j] -= rate * s * pdact(t.h[i]) * in_[j]
 
 
-def fprop(t: Tinn, in_: float) -> None:
+def fprop(t: Tinn, in_: List[float]) -> None:
     """Forward propagation."""
     # Calculate hidden layer neuron values.
     for i in range(t.nhid):
