@@ -9,14 +9,20 @@ import pickle
 class Tinn:
 
     def __init__(self, nips: int, nhid: int, nops: int):
-        """Build a new t object given number of inputs (nips), number of hidden neurons for the hidden layer (nhid), and number of outputs (nops)."""
+        """Build a new Tinn object given:
+        * number of inputs (nips),
+        * number of hidden neurons for the hidden layer (nhid),
+        * and number of outputs (nops)."""
         self.nips = nips  # number of inputs
         self.nhid = nhid
         self.nops = nops
-        self.b = [random.random() - 0.5 for _ in range(2)]  # biases, Tinn only supports one hidden layer so there are two biases
+
+        # biases, Tinn only supports one hidden layer so there are two biases
+        self.b = [random.random() - 0.5 for _ in range(2)]
         self.x1 = [[0] * nips for _ in range(nhid)]  # input to hidden layer
         self.h = [0] * nhid  # hidden layer
-        self.x2 = [[random.random() - 0.5 for _ in range(nhid)] for _ in range(nops)]  # hidden to output layer weights
+        self.x2 = [[random.random() - 0.5 for _ in range(nhid)]
+                   for _ in range(nops)]  # hidden to output layer weights
         self.o = [0] * nops  # output layer
 
     def save(self, path):
@@ -30,7 +36,11 @@ def xtload(path: str) -> Tinn:
 
 
 def xttrain(t: Tinn, in_: float, tg: float, rate: float) -> float:
-    """Trains a t with an input and target output with a learning rate. Returns error rate of the neural network."""
+    """Trains a Tinn (t) given:
+    * an input (in_),
+    * target output (tg), and
+    * learning rate (rate).
+    Returns error rate of the neural network."""
     fprop(t, in_)
     bprop(t, in_, tg, rate)
     return toterr(tg, t.o)

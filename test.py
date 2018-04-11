@@ -10,7 +10,8 @@ class Data:
         self.read_data(path, nips, nops)
 
     def __repr__(self):
-        return f'{len(self)} rows with {len(self.in_[0])} inputs and {len(self.tg[0])} outputs.'
+        return f'{len(self)} rows with {len(self.in_[0])} inputs and ' \
+               f'{len(self.tg[0])} outputs.'
 
     def read_data(self, path, nips, nops):
         self.in_, self.tg = [], []
