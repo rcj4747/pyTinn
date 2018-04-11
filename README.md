@@ -1,5 +1,5 @@
 # pyTinn
-Pythonic port of the [Tinn library](https://github.com/glouw/tinn) in 100 lines of code.
+Pythonic port of the [Tinn library](https://github.com/glouw/tinn) in 109 lines of code.
 
 For a quick demo, get some training data:
 
